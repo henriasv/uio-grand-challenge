@@ -15,31 +15,34 @@ void writeArrayToFile(ofstream& outFile, double * array, int numBlocks);
 int main()
 {
 	// Choose parameters
-	const int numBlocks = 70;
-	double dt 			= 1e-7;
-	double tStop 		= 0.01;
-	double t 			= 0;
-	int writeFrequency 	= 10;
+	const int numBlocks 		= 70;
+	double dt 							= 1e-7;
+	double tStop 						= 0.01;
+	double t 								= 0;
+	double pusherVelocity 	= 4e-4;
+	double pusherStiffness 	= 4e6;
+	int writeFrequency 			= 10;
 
-	double k		= 2.3e7;
-	double L 		= 0.14;
-	double d 		= L/(numBlocks-1);
+	double k		= 2.3e7; // Stiffness between blocks
+	double L 		= 0.14; // Physical length of block chain
+	double d 		= L/(numBlocks-1); // Distance between blocks in block chain
 
 	// Create output stream
 	ofstream outFilePositions("output/positions.bin");
 
-
-	// Allocate positions:
+	// Allocate position array:
 	double positions[numBlocks];
-	// Alocate velocities:
+	// Allocate velocity array:
 	double velocities[numBlocks];
-	// Allocate forces:
+	// Allocate force array:
 	double forces[numBlocks];
 
-	// Initialize positions
+	// Initialize arrays
 	for (int i = 0; i<numBlocks; i++)
 	{
 		positions[i] = d*i;
+		velocities[i] = 0;
+		forces[i] = 0;
 	}
 
 	int counter = 0;
@@ -49,6 +52,7 @@ int main()
 		calculateForces(k, d, forces, positions, velocities, numBlocks);
 		integrate(forces, positions, velocities, numBlocks);
 
+		// modulo operation to check whether to write output to file on this timestep
 		if ( (counter%writeFrequency) == 0)
 		{
 			writeArrayToFile(outFilePositions, positions, numBlocks);
@@ -62,7 +66,7 @@ int main()
 	return 0;
 }
 
-void calculateForces(double k, double d, double* forces, double* positions, double* velocities, int numBlocks)
+void calculateForces(double k, double d, double * forces, double * positions, double * velocities, int numBlocks)
 {
 	// Reset forces
 	for (int i = 0; i<numBlocks; i++)
@@ -72,7 +76,7 @@ void calculateForces(double k, double d, double* forces, double* positions, doub
 
 	// First block
 	forces[0] += springForce(k, d, positions[0], positions[1]);
-	
+
 	// Middle blocks
 	for (int i = 1; i<numBlocks-1; i++)
 	{
@@ -90,12 +94,12 @@ void integrate(double * forces, double * positions, double * velocities, int num
 }
 
 
-double springForce(double k, double d, double x1, double x2)
+double springForce(double & k, double & d, double & x1, double& x2)
 {
 	return k*(x2-x1-d);
 }
 
-void writeArrayToFile(ofstream& outFile, double * array, int numBlocks)
+void writeArrayToFile(ofstream & outFile, double * array, int numBlocks)
 {
 	outFile.write(reinterpret_cast<char*>(array), numBlocks*sizeof(double));
 }
