@@ -11,7 +11,7 @@ nt = len(positions)/numBlocks;
 
 positions.resize(nt, numBlocks)
 
-plt.pcolormesh(positions)
+plt.pcolormesh(positions-positions[0])
 plt.xlabel('Block index')
 plt.ylabel('Time step')
 plt.colorbar()
