@@ -1,5 +1,6 @@
 // Build command:
 // g++ main.cpp -o main
+// g++ is the compiler, main.cpp is the input file, and "-o main" specifies that the executable file is called "main".
 
 #include <iostream>
 #include <fstream>
@@ -12,7 +13,7 @@ void integrate(double dt, double m, double * forces, double * positions, double 
 double springForce(double k, double d, double x1, double x2);
 void writeArrayToFile(ofstream& outFile, double * array, int numBlocks);
 
-int main()
+int main() // This function runs when you execute the program.
 {
 	// Choose parameters
 	const int numBlocks 		= 70;
