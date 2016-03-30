@@ -16,24 +16,25 @@ void writeArrayToFile(ofstream& outFile, double * array, int numBlocks);
 int main() // This function runs when you execute the program.
 {
 	// Choose parameters
-	const int numBlocks 		= 70;
-	double dt 							= 1e-7;
-	double tStop 						= 0.01;
-	double t 								= 0;
+	const int numBlocks		= 70;
+	double dt				= 1e-7;
+	double tStop 			= 0.01;
+	double t 				= 0;
 
-	double vPusher 	= 4e-4;
-	double kPusher 	= 4e6;
+	double vPusher 			= 4e-4;
+	double kPusher 			= 4e6;
 
-	double k		= 2.3e6; // Stiffness between blocks
-	double L 		= 0.14; // Physical length of block chain
-	double d 		= L/(numBlocks-1); // Distance between blocks in block chain
-	double M 		= 0.12;
-	double m 		= M/numBlocks;
+	double k				= 2.3e6; // Stiffness between blocks
+	double L 				= 0.14; // Physical length of block chain
+	double d 				= L/(numBlocks-1); // Distance between blocks in block chain
+	double M 				= 0.12;
+	double m 				= M/numBlocks;
 
-	int writeFrequency 			= 10;
+	int writeFrequency 		= 10;
 
-	// Create output stream
+	// Create output streams
 	ofstream outFilePositions("output/positions.bin");
+	ofstream outFileParameters("output/parameters.txt");
 
 	// Allocate position array:
 	double positions[numBlocks];
@@ -66,6 +67,14 @@ int main() // This function runs when you execute the program.
 		counter ++;
 	}
 
+	// Output parameters to file
+	outFileParameters << "nx " << numBlocks << "\n";
+	outFileParameters << "dt " << dt << "\n";
+	// .. fill in the rest of the parameters
+
+	// Close output files
+	outFilePositions.close();
+	outFileParameters.close();
 
 	cout << "Ran " << counter << " integration steps" << endl;
 	return 0;
@@ -96,7 +105,7 @@ void calculateForces(double t, double k, double d, double kPusher, double vPushe
 
 void integrate(double dt, double mass, double * forces, double * positions, double * velocities, int numBlocks)
 {
-	// Euler Cromer
+	// Euler-Cromer
 	for (int i = 0; i<numBlocks; i++)
 	{
 		velocities[i] += forces[i]/mass*dt;
