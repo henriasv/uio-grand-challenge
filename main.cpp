@@ -18,19 +18,19 @@ int main() // This function runs when you execute the program.
 	// Choose parameters
 	const int numBlocks		= 70;
 	double dt				= 1e-7;
-	double tStop 			= 0.01;
-	double t 				= 0;
+	double tStop			= 0.01;
+	double t				= 0;
 
-	double vPusher 			= 4e-4;
-	double kPusher 			= 4e6;
+	double vPusher			= 4e-4;
+	double kPusher			= 4e6;
 
 	double k				= 2.3e6; // Stiffness between blocks
-	double L 				= 0.14; // Physical length of block chain
-	double d 				= L/(numBlocks-1); // Distance between blocks in block chain
-	double M 				= 0.12;
-	double m 				= M/numBlocks;
+	double L				= 0.14; // Physical length of block chain
+	double d				= L/(numBlocks-1); // Distance between blocks in block chain
+	double M				= 0.12;
+	double m				= M/numBlocks;
 
-	int writeFrequency 		= 10;
+	int writeFrequency		= 10;
 
 	// Create output streams
 	ofstream outFilePositions("output/positions.bin");
