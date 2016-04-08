@@ -9,9 +9,13 @@ using namespace std;
 
 // Forward declare functions
 void calculateForces(double t, double k, double d, double kPusher, double vPusher, double* forces, double* positions, double* velocities, int numBlocks);
+
 void integrate(double dt, double m, double * forces, double * positions, double * velocities, int numBlocks);
+
 double springForce(double k, double d, double x1, double x2);
+
 void writeArrayToFile(ofstream& outFile, double * array, int numBlocks);
+
 
 int main() // This function runs when you execute the program.
 {
@@ -24,9 +28,9 @@ int main() // This function runs when you execute the program.
 	double vPusher			= 4e-4;
 	double kPusher			= 4e6;
 
-	double k				= 2.3e6; // Stiffness between blocks
-	double L				= 0.14; // Physical length of block chain
-	double d				= L/(numBlocks-1); // Distance between blocks in block chain
+	double k				= 2.3e6; 			// Stiffness between blocks
+	double L				= 0.14; 			// Physical length of block chain
+	double d				= L/(numBlocks-1); 	// Distance between blocks in block chain
 	double M				= 0.12;
 	double m				= M/numBlocks;
 
@@ -96,7 +100,7 @@ void calculateForces(double t, double k, double d, double kPusher, double vPushe
 	for (int i = 1; i<numBlocks-1; i++)
 	{
 		forces[i] += springForce(k, d, positions[i], positions[i+1])
-					+ springForce(k, -d, positions[i], positions[i-1]);
+					- springForce(k, d, positions[i-1], positions[i]);
 	}
 
 	// Last block
